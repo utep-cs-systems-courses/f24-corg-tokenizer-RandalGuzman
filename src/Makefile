@@ -1,16 +1,25 @@
 CC = gcc
 CFLAGS = -Wall -g
 
-all: main
+SRCS = main.c tokenizer.c history.c
 
-main: main.o tokenizer.o
-	$(CC) -o main main.o tokenizer.o
+OBJS = main.o tokenizer.o history.o
 
-main.o: main.c tokenizer.h
+TARGET = main
+
+all: $(TARGET)
+
+$(TARGET): $(OBJS)
+	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS)
+
+main.o: main.c tokenizer.h history.h
 	$(CC) $(CFLAGS) -c main.c
 
 tokenizer.o: tokenizer.c tokenizer.h
 	$(CC) $(CFLAGS) -c tokenizer.c
 
+history.o: history.c history.h
+	$(CC) $(CFLAGS) -c history.c
+
 clean:
-	rm -f *.o main
+	rm -f $(OBJS) $(TARGET)

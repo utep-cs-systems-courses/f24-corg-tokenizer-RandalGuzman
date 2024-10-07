@@ -1,37 +1,55 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "tokenizer.h"
-#define BUFFER_SIZE 1024
+#include "history.h"
 
 int main() {
-  char input[BUFFER_SIZE];
+  List *history = init_history();  //initialize history linked lsit
+  char input[256];  //buffer size to store user input
+  char *token;  //pointer to store tokens
 
-  printf("Enter a string to tokenize  or  'q' to quit):\n");
+  printf("Enter a string or type 'q' to quit): ");
 
-  while (1) {
+  while(1) {
     printf("> ");
-    if (fgets(input, BUFFER_SIZE, stdin) == NULL) {
-      break;
-    }
+    fgets(input, sizeof(input), stdin);  //gets user input
 
-    for (int i = 0; input[i]; i++) {
+    for (int i = 0; i < sizeof(input); i++) {  //removes the newline char if there
       if (input[i] == '\n') {
-	input[i] = '\0';
+	input[i] = '\0';  //replaces newline with null terminator
 	break;
       }
     }
 
-    if (input[0] == '\0') {
+    if (input[0] == '!' && input[1] >= '1' && input[1] <= '9') {  //checks if input is in history
+      int id = input[1] - '0';  //convertsthe second char to int
+      char *history_input = get_history(history, id);  //retrieves history item
+
+      if (history_input) {
+	printf("%s\n", history_input);
+	token = tokenizer(history_input);  //tokenize the recalled input
+	print_tokens(token);  //prints the tokens
+	free_tokens(token);  //free the tokens
+      } else {
+	printf("No history item found with id %d. \n", id);
+      }
       continue;
     }
 
-    if (strcmp(input, "q") == 0) {
+    //copies the input string to add to history
+    char *input_copy = (char *)malloc((strlen(input) + 1) * sizeof(char));
+    strcpy(input_copy, input);  //copies the string
+    add_history(history, input_copy);  //adds the copy to history
+
+    token = tokenizer(input);  //tokenize the input
+    print_tokens(token);  //printsthe tokens
+    free_tokens(token);  //free the tokens
+
+    if (strcmp(input, "q")  == 0) {  //if "q" then break the loop
       break;
     }
-
-    char **tokens = tokenizer(input);
-    print_tokens(tokens);
-    free_tokens(tokens);
   }
+  print_history(history);  //prints the entire history
+  free_history(history);  //free the history list
   return 0;
 }
-  
