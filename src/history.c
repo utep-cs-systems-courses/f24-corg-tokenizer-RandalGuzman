@@ -39,7 +39,7 @@ char *get_history(List *list, int id) {  //get history by the id
 
 void print_history(List *list) {  //prints the entire history
   Item *current = list->root;
-  while (current != NULL) {  //traverse the list and prints each item
+  while (current) {  //traverse the list and prints each item
     printf("%d: %s\n", current->id, current->str);  //prints the id and string
     current = current->next;  //moves to the next item
   }

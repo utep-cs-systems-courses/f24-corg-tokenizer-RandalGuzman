@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -g
+CFLAGS = -g
 
 SRCS = main.c tokenizer.c history.c
 

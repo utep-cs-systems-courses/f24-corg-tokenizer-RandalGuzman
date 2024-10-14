@@ -8,7 +8,7 @@ int main() {
   char input[256];  //buffer size to store user input
   char *token;  //pointer to store tokens
 
-  printf("Enter a string or type 'q' to quit): ");
+  printf("Enter a string, view history,or type 'q' to quit): \n ");
 
   while(1) {
     printf("> ");
@@ -27,7 +27,7 @@ int main() {
 
       if (history_input) {
 	printf("%s\n", history_input);
-	token = tokenizer(history_input);  //tokenize the recalled input
+	token = tokenize(history_input);  //tokenize the recalled input
 	print_tokens(token);  //prints the tokens
 	free_tokens(token);  //free the tokens
       } else {
@@ -41,15 +41,18 @@ int main() {
     strcpy(input_copy, input);  //copies the string
     add_history(history, input_copy);  //adds the copy to history
 
-    token = tokenizer(input);  //tokenize the input
+    token = tokenize(input);  //tokenize the input
     print_tokens(token);  //printsthe tokens
     free_tokens(token);  //free the tokens
 
     if (strcmp(input, "q")  == 0) {  //if "q" then break the loop
       break;
     }
+    if (strcmp(input, "history") == 0) {  //if "history" then prints out history
+      print_history(history);
+      continue;
+    }
   }
-  print_history(history);  //prints the entire history
   free_history(history);  //free the history list
   return 0;
 }

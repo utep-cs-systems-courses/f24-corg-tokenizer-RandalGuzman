@@ -40,7 +40,7 @@ char *copy_str(char *inStr, short len) {
   return copy;
 }
 
-char **tokenizer(char *str) {
+char **tokenize(char *str) {
   int token_count = count_tokens(str);  //counts tokens
   char **tokens = (char **) malloc((token_count + 1) * sizeof(char *));//allocate memory for tokens
   char *start = token_start(str);  //gets the first token
